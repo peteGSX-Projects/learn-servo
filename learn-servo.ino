@@ -1,4 +1,8 @@
 #include <Arduino.h>
+#include <Servo.h>
+
+Servo servoObject1;
+Servo servoObject2;
 
 const uint8_t servo1Pin = 3;
 const uint8_t servo2Pin = 11;
@@ -10,12 +14,14 @@ char serialInputChars[numSerialChars];  // Char array for serial input
 void setup() {
   Serial.begin(115200);
   Serial.println(F("Learning servo"));
-  pinMode(servo1Pin, OUTPUT);
-  pinMode(servo2Pin, OUTPUT);
-  TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
-  OCR2A = 180;
-  OCR2B = 50;
+  // pinMode(servo1Pin, OUTPUT);
+  // pinMode(servo2Pin, OUTPUT);
+  // TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM20);
+  // TCCR2B = _BV(CS22);
+  // OCR2A = 180;
+  // OCR2B = 50;
+  servoObject1.attach(servo1Pin);
+  servoObject2.attach(servo2Pin);
 }
 
 void loop() {
