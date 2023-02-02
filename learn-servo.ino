@@ -1,11 +1,16 @@
 #include <Arduino.h>
 #include <Servo.h>
 
+#define SERVO1 3      // 500Hz
+#define SERVO2 5      // 1KHz
+#define RED_LED 6     // 1KHz
+#define AMBER_LED 9   // 500Hz
+#define SERVO3 10     // 500Hz - not in use
+#define GREEN_LED 11  // 500Hz
+
 Servo servoObject1;
 Servo servoObject2;
-
-const uint8_t servo1Pin = 3;
-const uint8_t servo2Pin = 11;
+Servo servoObject3;
 
 bool newSerialData = false;   // Flag for new serial data being received
 const byte numSerialChars = 10;   // Max number of chars for serial input
@@ -14,35 +19,10 @@ char serialInputChars[numSerialChars];  // Char array for serial input
 void setup() {
   Serial.begin(115200);
   Serial.println(F("Learning servo"));
-  // pinMode(servo1Pin, OUTPUT);
-  // pinMode(servo2Pin, OUTPUT);
-  // TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM20);
-  // TCCR2B = _BV(CS22);
-  // OCR2A = 180;
-  // OCR2B = 50;
-  servoObject1.attach(servo1Pin);
-  servoObject2.attach(servo2Pin);
 }
 
 void loop() {
   processSerialInput();
-  // Serial.println("10");
-  // analogWrite(servo1Pin, 10);
-  // analogWrite(servo2Pin, 200);
-  // delay(1000);
-  // Serial.println("50");
-  // analogWrite(servo1Pin, 50);
-  // delay(1000);
-  // Serial.println("100");
-  // analogWrite(servo1Pin, 100);
-  // analogWrite(servo2Pin, 10);
-  // delay(1000);
-  // Serial.println("150");
-  // analogWrite(servo1Pin, 150);
-  // delay(1000);
-  // Serial.println("255");
-  // analogWrite(servo1Pin, 255);
-  // delay(1000);
 }
 
 void processSerialInput() {
@@ -71,16 +51,79 @@ void processSerialInput() {
     }
   }
   if (newSerialData == true) {
-    Serial.println("Process input");
     newSerialData = false;
     char * strtokIndex;
     strtokIndex = strtok(serialInputChars," ");
+    char activity = strtokIndex[0];
+    strtokIndex = strtok(NULL," ");
     unsigned long parameter = strtol(strtokIndex, NULL, 10);
-    analogWrite(servo1Pin, parameter);
-    Serial.print("analogWrite(");
-    Serial.print(servo1Pin);
-    Serial.print(", ");
-    Serial.print(parameter);
-    Serial.println(");");
+    switch(activity) {
+      case '1':
+        Serial.print(F("Move servo 1 to "));
+        Serial.println(parameter);
+        if(!servoObject1.attached()) {
+          servoObject1.attach(SERVO1);
+        }
+        servoObject1.write(parameter);
+        break;
+      case '2':
+        Serial.print(F("Move servo 1 to "));
+        Serial.println(parameter);
+        if(!servoObject2.attached()) {
+          servoObject2.attach(SERVO2);
+        }
+        servoObject2.write(parameter);
+        break;
+      case '3':
+        Serial.print(F("Set LED 1 to "));
+        Serial.println(parameter);
+        if(!servoObject3.attached()) {
+          servoObject3.attach(RED_LED);
+        }
+        servoObject3.write(parameter);
+        break;
+      case '4':
+        Serial.print(F("Move servo 1 for "));
+        Serial.print(parameter);
+        Serial.println(F(" us"));
+        if(!servoObject1.attached()) {
+          servoObject1.attach(SERVO1);
+        }
+        servoObject1.writeMicroseconds(parameter);
+        break;
+      case '5':
+        Serial.print(F("Move servo 2 for "));
+        Serial.print(parameter);
+        Serial.println(F(" us"));
+        if(!servoObject2.attached()) {
+          servoObject2.attach(SERVO2);
+        }
+        servoObject2.writeMicroseconds(parameter);
+        break;
+      case '6':
+        Serial.print(F("Set LED 1 for "));
+        Serial.print(parameter);
+        Serial.println(F(" us"));
+        if(!servoObject3.attached()) {
+          servoObject3.attach(RED_LED);
+        }
+        servoObject3.writeMicroseconds(parameter);
+        break;
+      case '7':
+        servoObject1.detach();
+        servoObject2.detach();
+        servoObject3.detach();
+        break;
+      case '8':
+        pinMode(RED_LED, OUTPUT);
+        digitalWrite(RED_LED, HIGH);
+        break;
+      case '9':
+        pinMode(RED_LED, OUTPUT);
+        digitalWrite(RED_LED, LOW);
+        break;
+      default:
+        break;
+    }
   }
 }
