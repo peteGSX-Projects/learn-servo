@@ -47,6 +47,12 @@ void processSerialInput() {
       case '2':
         moveToMicroseconds(pin, parameter);
         break;
+      case '3':
+        writeAnalogueValue(pin, parameter);
+        break;
+      case '4':
+        writeHighLow(pin, parameter);
+        break;
       default:
         break;
     }
