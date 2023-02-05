@@ -3,6 +3,12 @@
 #include "globals.h"
 #include "serial_function.h"
 
+#if defined(ARDUINO_AVR_NANO)
+#include "arduino_nano.h"
+#else
+#define CPU_TYPE_ERROR
+#endif
+
 #ifdef CPU_TYPE_ERROR
 #error Unsupported CPU
 #endif

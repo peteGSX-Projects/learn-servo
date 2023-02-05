@@ -9,4 +9,6 @@ struct servoDefinition {
   uint8_t pin;
 };
 
+#define MAX_PWM_PINS 16
+
 #endif
