@@ -9,6 +9,8 @@ struct servoDefinition {
   uint8_t pin;
 };
 
-#define MAX_PWM_PINS 16
+#if defined(ARDUINO_AVR_NANO)
+#define NUM_PWM_PINS 6
+#endif
 
 #endif

@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include "defines.h"
 
-extern servoDefinition servoObjects[MAX_PWM_PINS];
+extern servoDefinition servoObjects[NUM_PWM_PINS];
 extern uint8_t numPWMPins;
 
 #endif
